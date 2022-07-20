@@ -1,27 +1,14 @@
-const express = require("express"),
-  path = require("path"),
-  cors = require("cors"),
-  multer = require("multer"),
-  bodyParser = require("body-parser"),
-  mongoose = require("mongoose"),
-  infoModel = require("./model.js");
-// formidable = require("formidable");
-// File upload settings
-const PATH = "./uploads";
+// imports
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+const mongoose = require("mongoose");
 
-let filePath;
+// import routers
+const informationRoutes = require("./routes/information");
 
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, PATH);
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
-let upload = multer({
-  storage: storage,
-});
 // Express settings
 const app = express();
 app.use(cors());
@@ -31,11 +18,16 @@ app.use(
     extended: true,
   })
 );
+
+// connect to mongoDB
 mongoose
-  .connect(`mongodb://localhost:27017/data`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DB}`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
   })
@@ -44,59 +36,14 @@ mongoose
     process.exit();
   });
 
-app.post("/api/info", function (req, res) {
-  console.log(req.body.information);
-  const data = req.body.information;
-
-  const uploadData = {
-    name: data.personal.name,
-    email: data.personal.email,
-    phone: data.personal.phone,
-    address: data.personal.address,
-    university: data.education.university,
-    degree: data.education.degree,
-    major: data.education.major,
-    gpa: data.education.gpa,
-    filePath: filePath,
-  };
-
-  console.log(uploadData);
-
-  const info = new infoModel(uploadData);
-
-  info.save((err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  });
-});
-
-// POST File
-app.post("/api/upload", upload.single("file"), function (req, res) {
-  if (!req.file) {
-    console.log("No file is available!");
-    return res.send({
-      success: false,
-    });
-  } else {
-    console.log("File is available!");
-    console.log(req.file);
-    filePath = req.file.path;
-    return res.send({
-      file: filePath,
-      success: true,
-    });
-  }
-});
-
-// Create PORT
-const PORT = process.env.PORT || 8080;
+// Create PORT and run the server
+const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {
   console.log("Connected to port " + PORT);
 });
+
+// setting up route endpoints
+app.use("/api/", informationRoutes);
 
 // Find 404 and hand over to error handler
 app.use((req, res, next) => {
