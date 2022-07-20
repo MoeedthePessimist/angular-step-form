@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+/*
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* body > * {
+  display: flex;
+  flex-direction: column;
+} */
+
+body {
+  background: #eff2f7;
+}
+
+.form-container {
+  margin-top: 2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}

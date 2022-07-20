@@ -1,0 +1,68 @@
+<form [formGroup]="myForm" class="form-container">
+  <p-card>
+    <div class="field">
+      <label for="name">Name</label>
+      <input formControlName="name" id="name" type="text" required pInputText />
+      <small
+        *ngIf="
+          myForm.get('name').invalid &&
+          (myForm.get('name').dirty || myForm.get('name').touched)
+        "
+        class="p-error"
+        >Firstname is required.</small
+      >
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        formControlName="email"
+        id="email"
+        type="email"
+        required
+        pInputText
+      />
+      <small
+        *ngIf="
+          myForm.get('email').invalid &&
+          (myForm.get('email').dirty || myForm.get('email').touched)
+        "
+        class="p-error"
+        >Email is required.</small
+      >
+    </div>
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input
+        formControlName="phone"
+        id="phone"
+        type="text"
+        required
+        pInputText
+      />
+      <small
+        *ngIf="
+          myForm.get('phone').invalid &&
+          (myForm.get('phone').dirty || myForm.get('phone').touched)
+        "
+        class="p-error"
+        >Phone no. is required.</small
+      >
+    </div>
+    <div class="field">
+      <label for="address">Address</label>
+      <input formControlName="address" id="address" type="text" pInputText />
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="grid grid-nogutter justify-content-end">
+        <p-button
+          label="Next"
+          (onClick)="nextPage($event)"
+          icon="pi pi-angle-right"
+          iconPos="right"
+          [disabled]="myForm.invalid"
+        ></p-button>
+      </div>
+    </ng-template>
+  </p-card>
+</form>
