@@ -28,6 +28,23 @@ export class InformationService {
     return this.information;
   }
 
+  resetInformation() {
+    this.information = {
+      personal: {
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+      },
+      education: {
+        university: '',
+        degree: '',
+        major: '',
+        GPA: 1.7,
+      },
+    };
+  }
+
   setInformation(information: any) {
     this.information = information;
   }

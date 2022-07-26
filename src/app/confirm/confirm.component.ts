@@ -35,12 +35,13 @@ export class ConfirmComponent implements OnInit {
     this.image = event.files[0];
   }
 
-  complete() {
-    this.informationService.complete();
-  }
-
   prevPage() {
     this.router.navigate(['/edu-info']);
+  }
+
+  goToStart() {
+    this.informationService.resetInformation();
+    this.router.navigate(['/user-info']);
   }
 
   onSubmit() {
@@ -48,6 +49,7 @@ export class ConfirmComponent implements OnInit {
     this.uploadService.uploadInformation(this.information).subscribe(
       (data) => {
         console.log(data);
+        this.goToStart();
       },
       (err) => {
         console.log(err.error.message);
