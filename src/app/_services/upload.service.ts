@@ -17,7 +17,6 @@ export class UploadService {
   constructor(private http: HttpClient) {}
 
   uploadInformation(information: any): Observable<any> {
-    const data = information;
     console.log('upload information function called');
     return this.http.post(
       AUTH_API + 'uploadInfo',
@@ -28,6 +27,8 @@ export class UploadService {
 
   uploadImage(file: File): Observable<any> {
     this.formData.append('file', file);
-    return this.http.post(AUTH_API + 'uploadImage', this.formData);
+    const res = this.http.post(AUTH_API + 'uploadImage', this.formData);
+    this.formData.delete('file');
+    return res;
   }
 }
